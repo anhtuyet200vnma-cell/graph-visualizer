@@ -1,0 +1,235 @@
+:root{
+  --bg:#071018;
+  --panel: rgba(10,12,16,0.6);
+  --muted:#98a8b8;
+  --accent1:#ffcc33;
+  --accent2:#2ee7d6;
+  --pink:#ff4ecb;
+  --glass: rgba(255,255,255,0.03);
+  --glow-pink: 0 0 38px rgba(255,78,203,0.38);
+  --font-main:"Inter",system-ui;
+}
+
+*{box-sizing:border-box}
+html,body,#app{height:100%;}
+
+body{
+  body {
+  body {
+  margin: 0;
+  background: url("IMAGES/night-city.jpg") no-repeat center center fixed;
+  background-size: cover;
+  font-family: "Inter", sans-serif;
+}
+
+}
+
+}
+
+/* HEADER */
+header{
+  height:72px; padding:12px 24px;
+  display:flex; align-items:center;
+  border-bottom:1px solid rgba(255,78,203,0.05);
+  backdrop-filter:blur(4px);
+}
+
+.brand{display:flex;align-items:center;gap:14px}
+
+.logo{
+  width:60px;height:60px;border-radius:14px;
+  background:linear-gradient(135deg,var(--pink),var(--accent2));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;
+  color:#071217;
+  box-shadow:var(--glow-pink);
+  font-size:20px;
+  border:1px solid rgba(255,255,255,0.15);
+}
+
+.brand h1{margin:0;font-size:20px;font-weight:800;}
+.subtitle{font-size:13px;color:rgba(255,255,255,0.7)}
+
+/* MAIN LAYOUT */
+main{
+  display:flex;
+  height:calc(100% - 72px);
+  gap:18px;
+  padding:18px;
+}
+
+/* CANVAS WRAP */
+#canvasWrap{
+  flex:1;position:relative;
+  border-radius:15px;
+  overflow:hidden;
+  padding:12px;
+
+  background:radial-gradient(circle at top left,
+      rgba(255,78,203,0.08),
+      rgba(46,231,214,0.06)
+    );
+
+  box-shadow:
+     0 6px 40px rgba(2,6,14,0.6),
+     0 0 35px rgba(46,231,214,0.12),
+     inset 0 0 22px rgba(255,78,203,0.05);
+  border:1px solid rgba(255,78,203,0.08);
+}
+
+#graphCanvas{
+  width:100%;
+  height:100%;
+  display:block;
+  border-radius:10px;
+  background:transparent;
+}
+
+.overlay.hint-box{
+  position:absolute;
+  left:18px;
+  bottom:18px;
+  background:rgba(0,0,0,0.35);
+  padding:8px 12px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.04);
+  font-size:13px;
+}
+
+/* SIDE PANEL */
+#sidePanel{
+  width:360px;
+  background:var(--panel);
+  border-radius:14px;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(255,78,203,0.08);
+
+  box-shadow:
+     -6px 12px 34px rgba(255,78,203,0.05),
+     inset 0 0 22px rgba(255,78,203,0.02);
+}
+
+.panel-section{
+  background:rgba(255,255,255,0.02);
+  padding:12px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.03);
+}
+
+.panel-section h3{
+  margin:0 0 8px 0;
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:0.5px;
+}
+
+/* BUTTONS GRID */
+.controls-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+/* ✨ MAIN BUTTON STYLE – PREMIUM NEON */
+.control{
+  padding:12px 14px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.12);
+
+  background:
+    linear-gradient(135deg, rgba(255,78,203,0.25), rgba(46,231,214,0.22)),
+    radial-gradient(circle at top left, rgba(255,78,203,0.25), transparent 60%),
+    radial-gradient(circle at bottom right, rgba(46,231,214,0.28), transparent 60%);
+
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+  letter-spacing:0.4px;
+
+  box-shadow:
+    0 4px 18px rgba(255,78,203,0.22),
+    inset 0 0 12px rgba(255,255,255,0.06);
+  transition:0.2s ease;
+}
+
+.control:hover{
+  transform:translateY(-4px) scale(1.03);
+  box-shadow:
+    0 0 25px rgba(255,78,203,0.55),
+    0 0 18px rgba(46,231,214,0.45),
+    inset 0 0 14px rgba(255,255,255,0.13);
+  border-color:rgba(255,78,203,0.65);
+}
+
+/* PRIMARY BUTTON – strongest glow */
+.control.primary{
+  background:linear-gradient(135deg, #ff4ecb, #2ee7d6);
+  color:#071217;
+  font-weight:800;
+  border:1px solid rgba(255,255,255,0.25);
+
+  box-shadow:
+    0 0 28px rgba(255,78,203,0.55),
+    0 0 24px rgba(46,231,214,0.45);
+}
+
+/* ACTIVE (Add Edge Mode ON) */
+.control.toggle.active{
+  border-color:#ff4ecb;
+  background:
+    linear-gradient(135deg, rgba(255,78,203,0.55), rgba(46,231,214,0.45));
+  box-shadow:
+    0 0 35px rgba(255,78,203,0.6),
+    inset 0 0 18px rgba(255,78,203,0.4);
+}
+
+/* Small buttons */
+.control.small{
+  padding:8px 12px;
+  font-size:13px;
+}
+
+/* Info section */
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  padding:6px 0;
+  font-size:14px;
+}
+
+.log{
+  height:160px;
+  background:rgba(0,0,0,0.25);
+  padding:8px;
+  border-radius:8px;
+  overflow:auto;
+  font-family:monospace;
+  font-size:13px;
+}
+
+.log-actions{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+
+@media (max-width:900px){
+  #sidePanel{width:320px;}
+}
+
+@media (max-width:720px){
+  main{flex-direction:column;}
+  #sidePanel{width:100%;}
+  /* Button glow (addon – giữ toàn bộ style cũ) */
+.control:hover {
+  box-shadow: 0 0 12px rgba(255, 78, 203, 0.45),
+              0 0 18px rgba(46, 231, 214, 0.35);
+  transform: translateY(-2px);
+}
+
+}

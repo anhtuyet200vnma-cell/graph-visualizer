@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Graph Visualizer — Bảo Ngọc đẹp gái</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+<div id="app">
+
+  <!-- HEADER -->
+  <header>
+    <div class="brand">
+      <div class="logo">GV</div>
+      <div>
+        <h1>Graph Visualizer</h1>
+        <div class="subtitle">Bảo Ngọc đẹp gái</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- CANVAS AREA -->
+    <section id="canvasWrap">
+      <canvas id="graphCanvas" tabindex="0"></canvas>
+      <div class="overlay hint-box">
+        <div class="hint">Left-click: thêm đỉnh • Kéo đỉnh • Right-drag: pan • Wheel: zoom • Add-Edge để nối cạnh</div>
+      </div>
+    </section>
+
+    <!-- SIDEBAR -->
+    <aside id="sidePanel">
+
+      <!-- Điều khiển -->
+      <div class="panel-section">
+        <h3>Điều khiển</h3>
+
+        <div class="controls-grid">
+
+          <!-- Modes -->
+          <button id="btnModeAddEdge" class="control toggle">Add Edge Mode: OFF</button>
+          <button id="btnLoadExample" class="control primary">Tải ví dụ</button>
+
+          <!-- Shortest Path -->
+          <button id="btnDijkstra" class="control">Dijkstra</button>
+
+          <!-- Traversal -->
+          <button id="btnBFS" class="control">BFS</button>
+          <button id="btnDFS" class="control">DFS</button>
+          <button id="btnBipartite" class="control">Bipartite Check</button>
+          <button id="btnSCC" class="control">SCC</button>
+
+
+          <!-- Representations -->
+          <button id="btnAdjList" class="control">Danh sách kề</button>
+          <button id="btnAdjMatrix" class="control">Ma trận kề</button>
+          <button id="btnEdgeList" class="control">Danh sách cạnh</button>
+
+          <!-- ================= -->
+          <!--  PHẦN NÂNG CAO   -->
+          <!-- ================= -->
+
+          <button class="control unimplemented">Prim</button>
+          <button class="control unimplemented">Kruskal</button>
+          <button class="control unimplemented">Ford-Fulkerson</button>
+          <button class="control unimplemented">Fleury</button>
+          <button class="control unimplemented">Hierholzer</button>
+          
+          <!-- THÊM DÒNG NÀY - TOGGLE ĐỒ THỊ CÓ HƯỚNG/VÔ HƯỚNG -->
+          <button id="btnToggleDirected" class="control toggle">Đồ thị: Vô hướng</button>
+
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="panel-section">
+        <h3>Thông tin</h3>
+        <div class="info-row"><span>Đỉnh:</span><span id="infoVertices">0</span></div>
+        <div class="info-row"><span>Cạnh:</span><span id="infoEdges">0</span></div>
+        <div class="info-row"><span>Chế độ:</span><span id="infoMode">Normal</span></div>
+      </div>
+
+      <!-- Log -->
+      <div class="panel-section">
+        <h3>Kết quả</h3>
+        <pre id="logArea" class="log"></pre>
+        <div class="log-actions">
+          <button id="btnClearLog" class="control small">Clear</button>
+          <button id="btnExport" class="control small">Export JSON</button>
+        </div>
+      </div>
+
+    </aside>
+
+  </main>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
