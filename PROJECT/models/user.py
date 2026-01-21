@@ -44,6 +44,4 @@ class User:
     
     def display_info(self):
         """Hiển thị thông tin user"""
-        
-        
         return f"ID: {self.user_id} | Tên: {self.full_name} | Email: {self.email} | Vai trò: {self.role}"
