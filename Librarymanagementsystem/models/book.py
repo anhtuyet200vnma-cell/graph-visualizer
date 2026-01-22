@@ -10,7 +10,7 @@ class Book:
         quantity: int,
         available_quantity: int,
         status: str,
-        author: Author
+        author
     ):
         self.book_id = book_id
         self.title = title
@@ -21,23 +21,18 @@ class Book:
         self.status = status
         self.author = author
 
-    def isAvailable(self) -> bool:
-        return self.available_quantity > 0 and self.status == "AVAILABLE"
+    # ===== State change only (NO business logic) =====
+    def decreaseAvailable(self):
+        self.available_quantity -= 1
+        if self.available_quantity <= 0:
+            self.status = "UNAVAILABLE"
 
-    def borrow(self) -> bool:
-        if self.isAvailable():
-            self.available_quantity -= 1
-            if self.available_quantity == 0:
-                self.status = "UNAVAILABLE"
-            return True
-        return False
-
-    def returnBook(self):
+    def increaseAvailable(self):
         self.available_quantity += 1
         if self.available_quantity > 0:
             self.status = "AVAILABLE"
 
-    def getDetails(self) -> dict:
+    def getDetails(self):
         return {
             "bookId": self.book_id,
             "title": self.title,
@@ -45,3 +40,4 @@ class Book:
             "status": self.status,
             "author": self.author.getAuthorName()
         }
+
