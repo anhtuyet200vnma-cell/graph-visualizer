@@ -1,0 +1,38 @@
+{
+  "borrow_orders": [
+    {
+      "borrow_id": 1,
+      "user_id": 2,
+      "borrow_date": "2024-01-15",
+      "due_date": "2024-01-29",
+      "status": "BORROWED",
+      "items": [
+        {
+          "book_id": "BK001",
+          "item_status": "BORROWED",
+          "condition": "GOOD"
+        },
+        {
+          "book_id": "BK002",
+          "item_status": "BORROWED",
+          "condition": "GOOD"
+        }
+      ]
+    },
+    {
+      "borrow_id": 2,
+      "user_id": 2,
+      "borrow_date": "2024-01-20",
+      "due_date": "2024-02-03",
+      "status": "RETURNED",
+      "items": [
+        {
+          "book_id": "BK004",
+          "item_status": "RETURNED",
+          "condition": "GOOD",
+          "actual_return_date": "2024-01-28"
+        }
+      ]
+    }
+  ]
+}

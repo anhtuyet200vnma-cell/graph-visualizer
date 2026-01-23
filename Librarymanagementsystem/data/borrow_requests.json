@@ -1,0 +1,27 @@
+{
+  "borrow_requests": [
+    {
+      "request_id": 1,
+      "user_id": 2,
+      "book_id": "BK001",
+      "request_date": "2024-02-01",
+      "status": "PENDING"
+    },
+    {
+      "request_id": 2,
+      "user_id": 3,
+      "book_id": "BK002",
+      "request_date": "2024-02-01",
+      "status": "REJECTED",
+      "reason": "Member is under penalty"
+    },
+    {
+      "request_id": 3,
+      "user_id": 2,
+      "book_id": "BK003",
+      "request_date": "2024-02-02",
+      "status": "REJECTED",
+      "reason": "Book is unavailable"
+    }
+  ]
+}
