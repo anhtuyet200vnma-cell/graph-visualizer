@@ -14,7 +14,7 @@ class FileHandler:
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
                 content = f.read().strip()
-                if not content:  # File có tồn tại nhưng rỗng
+                if not content: 
                     return []
                 return json.loads(content)
         except (json.JSONDecodeError, IOError) as e:
@@ -28,7 +28,6 @@ class FileHandler:
         Tự động tạo thư mục nếu chưa có.
         """
         try:
-            # Tạo thư mục chứa file nếu chưa tồn tại (VD: data/)
             directory = os.path.dirname(file_path)
             if directory and not os.path.exists(directory):
                 os.makedirs(directory)
