@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from models.waiting_list_item import WaitingListItem
+from waiting_list_item import WaitingListItem
 
 def generate_id():
     return uuid.uuid4().hex[:8]
@@ -12,10 +12,10 @@ def get_current_datetime():
 class WaitingList:
     """Waiting List - giỏ sách của member"""
     
-    def __init__(self, waiting_list_id=None, member_id=None, 
+    def __init__(self, waiting_list_id=None, user_id=None, 
                  created_date=None, items=None):
         self.waiting_list_id = waiting_list_id or generate_id()
-        self.member_id = member_id
+        self.user_id = user_id
         self.created_date = created_date or get_current_datetime()
         self.items = items or []  
     
@@ -34,7 +34,7 @@ class WaitingList:
                 return True, None
         
         # Thêm mục mới
-        new_item = WaitingListItem(book_id, quantity)
+        new_item = WaitingListItem(waiting_list_id=self.waiting_list_id, book_id=book_id, quantity=quantity)
         self.items.append(new_item)
         return True, None
     
