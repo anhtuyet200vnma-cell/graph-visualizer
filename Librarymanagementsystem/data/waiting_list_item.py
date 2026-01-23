@@ -1,5 +1,5 @@
 from sqlalchemy import (
-    Column, Interger, String, Date, Booolean, ForeignKey, DECIMAL
+    Column, Integer, String, Date, Booolean, ForeignKey, DECIMAL
 )
 from sqlalchemy.orm import relationship, declarative_base
 
@@ -19,7 +19,7 @@ class WaitingListItem(Base):
         primary_key=True
     )
 
-    quantity = Column(Interger, nullable=False)
+    quantity = Column(Integer, nullable=False)
 
     # realtionship
     waiting_list = relationship("WaitingList", back_populates="item")
