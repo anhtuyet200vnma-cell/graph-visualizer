@@ -1,39 +1,34 @@
 # models/admin.py
-from models.user import User
+from models.user import User, AccountStatus, Role
+
 
 class Admin(User):
-    def __init__(self, user_id, username, email, password, full_name, phone="", status="active"):
-        # Gọi constructor của lớp cha
-        super().__init__(user_id, username, email, password, full_name, phone, status, role="admin")
-    
-    def manage_books(self, action, book_data=None):
-        """Quản lý sách: thêm, sửa, xóa"""
-        actions = ["add", "edit", "delete", "view"]
-        if action not in actions:
-            return False, "Hành động không hợp lệ"
-        
-        # Ở đây sẽ gọi service sau
-        return True, f"Đã {action} sách thành công"
-    
-    def manage_members(self, action, member_id=None, member_data=None):
-        """Quản lý thành viên"""
-        actions = ["view", "edit", "suspend", "activate"]
-        if action not in actions:
-            return False, "Hành động không hợp lệ"
-        
-        return True, f"Đã {action} thành viên {member_id}"
-    
-    def approve_borrow_request(self, request_id, decision):
-        """Duyệt/từ chối yêu cầu mượn sách"""
-        decisions = ["approve", "reject"]
-        if decision not in decisions:
-            return False, "Quyết định không hợp lệ"
-        
-        return True, f"Đã {decision} yêu cầu {request_id}"
-    
-    def display_admin_info(self):
-        """Hiển thị thông tin admin"""
-        base_info = super().display_info()
+    """
+    Admin – Trang 50–51
+    """
 
+    def __init__(
+        self,
+        user_id: int,
+        username: str,
+        password: str,
+        email: str,
+        full_name: str,
+        phone_number: str,
+        status: AccountStatus = AccountStatus.ACTIVE,
+        created_at: str | None = None
+    ):
+        super().__init__(
+            user_id=user_id,
+            username=username,
+            password=password,
+            email=email,
+            full_name=full_name,
+            phone_number=phone_number,
+            role=Role.ADMIN,
+            status=status,
+            created_at=created_at
+        )
 
-        return f" {base_info} | Quyền: Quản trị hệ thống"
+    def __str__(self):
+        return f"Admin(id={self.user_id}, username={self.username})"

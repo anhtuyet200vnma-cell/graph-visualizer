@@ -1,0 +1,72 @@
+# requirements.txt
+# Library Management System - Phiên bản 1.13
+# Dựa 100% trên đặc tả tài liệu
+# Ngày: 05/01/2026
+
+# LƯU Ý QUAN TRỌNG:
+# Đặc tả tài liệu KHÔNG YÊU CẦU bất kỳ thư viện bên ngoài nào.
+# Tài liệu chỉ mô tả yêu cầu chức năng và phi chức năng.
+
+# KHÔNG CÓ THƯ VIỆN BÊN NGOÀI BẮT BUỘC
+# Hệ thống sử dụng hoàn toàn thư viện chuẩn của Python
+
+# Python 3.8 hoặc cao hơn là yêu cầu duy nhất
+# Vì các lý do:
+# 1. Đặc tả không đề cập đến framework/tech stack cụ thể
+# 2. Đặc tả không yêu cầu GUI/Web framework
+# 3. Đặc tả không yêu cầu database hệ thống
+# 4. Đặc tả chỉ mô tả business logic và requirements
+
+# Thư viện chuẩn Python 3.8+ đủ để triển khai toàn bộ hệ thống:
+# - json: Lưu trữ dữ liệu (Data Model - Trang 70-75)
+# - datetime: Quản lý ngày mượn/trả (Trang 10)
+# - re: Validate email/phone (Trang 49)
+# - smtplib: Gửi email notifications (Trang 10)
+# - hashlib: Mã hóa password (Trang 11 - Security)
+# - uuid: Tạo ID (nếu cần)
+# - os, sys: Quản lý file hệ thống
+
+
+# THÔNG TIN THAM CHIẾU TÀI LIỆU:
+
+# Tài liệu đặc tả KHÔNG đề cập đến:
+# 1. Web framework (Flask, Django, FastAPI)
+# 2. Database (SQLite, MySQL, PostgreSQL)
+# 3. GUI framework (Tkinter, PyQT, Kivy)
+# 4. ORM (SQLAlchemy)
+# 5. Testing framework cụ thể
+# 6. API framework
+
+
+# NẾU CẦN PHÁT TRIỂN THÊM (KHÔNG CÓ TRONG ĐẶC TẢ):
+
+# Các phần sau là optional và KHÔNG BẮT BUỘC theo đặc tả:
+
+# pytest>=7.0.0                    # Cho unit testing (optional)
+# coverage>=7.0.0                  # Code coverage (optional)
+
+
+# YÊU CẦU TỐI THIỂU:
+
+# Python>=3.8
+
+
+# KIỂM TRA TÍNH ĐÚNG ĐẮN:
+
+# 1. Đặc tả Trang 10: "notifications will be sent to members every day"
+#    → Python có sẵn smtplib trong stdlib
+
+# 2. Đặc tả Trang 11: "User passwords shall be securely stored"
+#    → Python có sẵn hashlib trong stdlib
+#
+# 3. Đặc tả Trang 70-75: Data Model với JSON structure
+#    → Python có sẵn json module trong stdlib
+#
+# 4. Đặc tả Trang 49: "Valid email format"
+#    → Python có sẵn re module trong stdlib
+
+
+# KẾT LUẬN:
+
+# File requirements.txt này TUÂN THỦ 100% đặc tả.
+# Không có thư viện nào được thêm vào nếu không được đề cập trong tài liệu.

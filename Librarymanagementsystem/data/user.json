@@ -1,79 +1,24 @@
-{
-  "users": [
-    {
-      "user_id": 1,
-      "username": "admin",
-      "email": "admin@library.com",
-      "password": "admin123",
-      "full_name": "System Administrator",
-      "phone_number": "0123456789",
-      "status": "ACTIVE",
-      "role": "admin",
-      "created_at": "2024-01-01 08:00:00",
-      "borrowing_limit": 0,
-      "penalty_status": false,
-      "membership_date": "2024-01-01",
-      "total_borrowed": 0
-    },
-    {
-      "user_id": 2,
-      "username": "john_doe",
-      "email": "john@example.com",
-      "password": "password123",
-      "full_name": "John Doe",
-      "phone_number": "0987654321",
-      "status": "ACTIVE",
-      "role": "member",
-      "created_at": "2024-01-02 09:30:00",
-      "borrowing_limit": 5,
-      "penalty_status": false,
-      "membership_date": "2024-01-02",
-      "total_borrowed": 2
-    },
-    {
-      "user_id": 3,
-      "username": "jane_smith",
-      "email": "jane@example.com",
-      "password": "secure456",
-      "full_name": "Jane Smith",
-      "phone_number": "0912345678",
-      "status": "ACTIVE",
-      "role": "member",
-      "created_at": "2024-01-03 10:15:00",
-      "borrowing_limit": 5,
-      "penalty_status": true,
-      "membership_date": "2024-01-03",
-      "total_borrowed": 4
-    },
-    {
-      "user_id": 4,
-      "username": "bob_wilson",
-      "email": "bob@example.com",
-      "password": "mypassword",
-      "full_name": "Bob Wilson",
-      "phone_number": "0934567890",
-      "status": "INACTIVE",
-      "role": "member",
-      "created_at": "2024-01-04 11:20:00",
-      "borrowing_limit": 5,
-      "penalty_status": false,
-      "membership_date": "2024-01-04",
-      "total_borrowed": 0
-    },
-    {
-      "user_id": 5,
-      "username": "librarian_01",
-      "email": "librarian@library.com",
-      "password": "lib123456",
-      "full_name": "Library Manager",
-      "phone_number": "0977777777",
-      "status": "ACTIVE",
-      "role": "admin",
-      "created_at": "2024-01-05 14:30:00",
-      "borrowing_limit": 0,
-      "penalty_status": false,
-      "membership_date": "2024-01-05",
-      "total_borrowed": 0
-    }
-  ]
-}
+[
+  {
+    "user_id": 1,
+    "username": "admin",
+    "email": "admin@library.com",
+    "password": "admin123",
+    "full_name": "System Administrator",
+    "phone_number": "0123456789",
+    "status": "ACTIVE",
+    "role": "ADMIN",
+    "created_at": "2024-01-01T08:00:00"
+  },
+  {
+    "user_id": 2,
+    "username": "john_doe",
+    "email": "john@example.com",
+    "password": "password123",
+    "full_name": "John Doe",
+    "phone_number": "0987654321",
+    "status": "ACTIVE",
+    "role": "MEMBER",
+    "created_at": "2024-01-02T09:30:00"
+  }
+]

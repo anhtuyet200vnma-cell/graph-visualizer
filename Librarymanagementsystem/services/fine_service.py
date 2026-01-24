@@ -1,19 +1,28 @@
+from utils.file_handler import load_json, save_json
+from config import FINE_PER_DAY
+from datetime import datetime
+import uuid
+
+
 class FineService:
-    """
-    FINE-RELATED CHECKS (1.4 & 1.5 trong đặc tả)
-    """
+    def __init__(self, path="data/fines.json"):
+        self.path = path
 
-    @staticmethod
-    def checkPenaltyStatus(member) -> bool:
-        """Check if member is under penalty (1.4)"""
-        return member.penalty_status if hasattr(member, 'penalty_status') else False
+    def calculate_fine(self, overdue_days: int) -> int:
+        if overdue_days <= 0:
+            return 0
+        return overdue_days * FINE_PER_DAY
 
-    @staticmethod
-    def calculateOverdueFine(days_overdue: int) -> float:
-        """Calculate overdue fine (1.5)"""
-        return days_overdue * 5000  # 5000 VND per day
+    def add_fine(self, user_id: int, amount: int) -> bool:
+        fines = load_json(self.path)
 
-    @staticmethod
-    def calculateDamageFine(book_value: float) -> float:
-        """Calculate damage fine (1.5)"""
-        return book_value * 0.5  # 50% of book value
+        fines.append({
+            "fine_id": str(uuid.uuid4()),
+            "user_id": user_id,
+            "amount": amount,
+            "status": "UNPAID",
+            "created_date": datetime.now().isoformat()
+        })
+
+        save_json(self.path, fines)
+        return True

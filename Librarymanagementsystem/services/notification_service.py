@@ -1,27 +1,22 @@
+from utils.file_handler import load_json, save_json
+from datetime import datetime
+import uuid
+
+
 class NotificationService:
-    """
-    NOTIFICATION MANAGEMENT (1.4 & 1.5 trong đặc tả)
-    """
+    def __init__(self, path="data/notifications.json"):
+        self.path = path
 
-    @staticmethod
-    def sendBorrowingConfirmation(member_name: str, book_title: str) -> str:
-        """Send confirmation email (1.4)"""
-        message = f"Borrowing confirmed: {book_title}"
-        print(f"Notification sent to {member_name}: {message}")
-        return message
+    def send_notification(self, user_id: int, content: str) -> bool:
+        notifications = load_json(self.path)
 
-    @staticmethod
-    def sendDueDateReminder(member_name: str, book_title: str, days_left: int) -> str:
-        """Send due date reminder (1.5)"""
-        if days_left <= 5:
-            message = f"Reminder: {book_title} due in {days_left} days"
-            print(f"Reminder sent to {member_name}: {message}")
-            return message
-        return ""
+        notifications.append({
+            "notification_id": str(uuid.uuid4()),
+            "user_id": user_id,
+            "content": content,
+            "created_date": datetime.now().isoformat(),
+            "status": "SENT"
+        })
 
-    @staticmethod
-    def sendReturnConfirmation(member_name: str, book_title: str) -> str:
-        """Send return confirmation"""
-        message = f"Return confirmed: {book_title}"
-        print(f"Notification sent to {member_name}: {message}")
-        return message
+        save_json(self.path, notifications)
+        return True
