@@ -98,7 +98,7 @@ class WaitingList:
         """Chuyển thành từ điển"""
         return {
             'waiting_list_id': self.waiting_list_id,
-            'member_id': self.member_id,
+            'user_id': self.user_id,
             'created_date': self.created_date,
             'items': [item.to_dict() for item in self.items]
         }

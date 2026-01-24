@@ -1,0 +1,8 @@
+{
+  "fine_id": "a1b2c3d4",
+  "borrow_order_detail_id": 101,
+  "amount": 15000,
+  "reason": "Trả trễ 3 ngày: 15,000 VND",
+  "paid_status": false,
+  "created_date": "2026-01-24 10:30:15"
+}

@@ -1,0 +1,17 @@
+{
+  "waiting_list_id": "wl123456",
+  "user_id": 5,
+  "created_date": "2026-01-24 10:30:15",
+  "items": [
+    {
+      "waiting_list_id": "wl123456",
+      "book_id": "B001",
+      "quantity": 2
+    },
+    {
+      "waiting_list_id": "wl123456",
+      "book_id": "B005",
+      "quantity": 1
+    }
+  ]
+}

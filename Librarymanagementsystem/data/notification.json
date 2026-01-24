@@ -1,0 +1,8 @@
+{
+  "notification_id": "noti001",
+  "content": "Bạn có sách sắp đến hạn trả!",
+  "send_date": "2026-01-24",
+  "type": "due_date",
+  "user_id": 5,
+  "is_sent": false
+}
