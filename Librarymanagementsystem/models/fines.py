@@ -22,48 +22,25 @@ class Fine:
         self.paid_status = paid_status
         self.created_date = created_date or get_current_datetime()
     
+
+    def calculate_fines(self, base_amount):
+        self.amount = base_amount
+        return self.amount
+    
     @classmethod
-    def calculate_fine(cls, overdue_days, book_condition=None):
-        """
-        Tính toán số tiền phạt dựa trên số ngày quá hạn và tình trạng sách
-        Trả về: (Đối tượng Tiền phạt, thông báo lỗi)
-        """
-        amount = 0.0
-        reasons = []
-        
-        # Fine for overdue
-        if overdue_days > 0:
-            overdue_fine = overdue_days * FINE_PER_DAY
-            amount += overdue_fine
-            reasons.append(f"Trả trễ {overdue_days} ngày: {overdue_fine:,.0f} VND")
-        
-        # Fine for damaged/lost book
-        if book_condition == 'DAMAGED':
-            damage_fine = 50000  # 50k for damaged
-            amount += damage_fine
-            reasons.append(f"Sách bị hư hỏng: {damage_fine:,.0f} VND")
-        elif book_condition == 'TORN':
-            torn_fine = 100000  # 100k for torn pages
-            amount += torn_fine
-            reasons.append(f"Sách bị rách: {torn_fine:,.0f} VND")
-        elif book_condition == 'LOST':
-            lost_fine = 500000  # 500k for lost book
-            amount += lost_fine
-            reasons.append(f"Mất sách: {lost_fine:,.0f} VND")
-        
-        if amount == 0:
+    def create_fine(cls, detail_obj, overdue_days):
+        base_amount, reason_str = detail_obj.calculate_fines(overdue_days)
+        if base_amount <= 0:
             return None, None
-        
-        reason = "; ".join(reasons)
-        fine = cls(amount=amount, reason=reason)
-        
-        return fine, None
+        new_fine = cls(
+            borrow_order_detail_id=detail_obj.borrow_order_detail_id,
+            reason=reason_str,
+            amount=0.0 
+        )
+        new_fine.calculate_fines(base_amount)
+        return new_fine, None
     
     def pay_fine(self):
-        """
-        Mark fine as paid
-        Returns: (success, error_message)
-        """
         if self.paid_status:
             return False, "Phạt đã được thanh toán"
         
@@ -71,11 +48,9 @@ class Fine:
         return True, None
     
     def get_amount_formatted(self):
-        """Get formatted amount string"""
         return f"{self.amount:,.0f} VND"
     
     def to_dict(self):
-        """Convert to dictionary"""
         return {
             'fine_id': self.fine_id,
             'borrow_order_detail_id': self.borrow_order_detail_id,
@@ -87,7 +62,6 @@ class Fine:
     
     @classmethod
     def from_dict(cls, data):
-        """Create Fine from dictionary"""
         return cls(**data)
     
     def __str__(self):
