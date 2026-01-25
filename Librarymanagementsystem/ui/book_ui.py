@@ -5,6 +5,12 @@ from tkinter import messagebox
 class BookUI(tk.Frame):
     def __init__(self, master, app):
         super().__init__(master)
+        tk.Button(
+            self,
+            text="⬅ Quay lại",
+            width=15,
+            command=lambda: app.show("main")
+        ).pack(anchor="w", padx=10, pady=5)
         self.app = app
         self.books_cache = []
         self.build_ui()
