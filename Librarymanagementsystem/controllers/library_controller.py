@@ -8,6 +8,7 @@ from models.admin import Admin
 from models.book import Book
 from models.borrow_order import BorrowOrder
 from models.waiting_list import WaitingList
+from models.book_author import BookAuthor
 
 from services.book_service import BookService
 from services.borrow_service import BorrowService
@@ -23,6 +24,7 @@ class LibraryController:
         self.books = self._load_books()
         self.borrow_orders = self._load_borrow_orders()
         self.waiting_lists = self._load_waiting_lists()
+        self.book_authors = self._load_book_authors()
         
         print(" [System] Đã tải dữ liệu thành công.")
 
@@ -46,6 +48,13 @@ class LibraryController:
             books_list.append(Book.from_dict(item))
         return books_list
 
+    def _load_book_authors(self):
+        data = self.file_handler.read_json("data/book_authors.json")
+        rels = []
+        for item in data:
+            rels.append(BookAuthor.from_dict(item))
+        return rels
+
     def _load_borrow_orders(self):
         return []
 
@@ -54,12 +63,9 @@ class LibraryController:
 
     def save_all_data(self):
         """Lưu toàn bộ dữ liệu từ RAM xuống ổ cứng"""
-        users_data = [u.to_dict() for u in self.users]
-        self.file_handler.write_json("data/users.json", users_data)
-
-        books_data = [b.to_dict() for b in self.books]
-        self.file_handler.write_json("data/book.json", books_data)
-
+        self.file_handler.write_json("data/users.json", [u.to_dict() for u in self.users])
+        self.file_handler.write_json("data/books.json", [b.to_dict() for b in self.books])
+        self.file_handler.write_json("data/book_authors.json", [ba.to_dict() for ba in self.book_authors])
         print(" [System] Đã lưu dữ liệu.")
 
     # XÁC THỰC (AUTHENTICATION)
@@ -120,30 +126,34 @@ class LibraryController:
         return False, "Lỗi: Sách này không nằm trong danh sách đang mượn của bạn."
 
     # ADMIN (ADMIN SERVICE)
-    def admin_add_book(self, book_id, title, publication_year, total_copies, author_id, category_id, quantity):
+    def admin_add_book(self, book_id, title, description, publication_year, quantity, author_id, category_id):
         """Admin thêm sách mới"""
         user = self.session_mgr.get_current_user()
         if not user or user.role != "admin":
             return False, "Truy cập bị từ chối. Cần quyền Admin."
         return True, "Thêm sách thành công."
 
-        if any(int(b.book_id) == int(book_id) for b in self.books):
+        if any(int(b.book_id) == str(book_id) for b in self.books):
             return False, "Book ID đã tồn tại."
         
-        total_copies = int(total_copies)
+        quantity = int(quantity)
 
         new_book = Book(
             book_id=int(book_id),
             title=title,
             publication_year=int(publication_year),
-            total_copies=total_copies,
-            available_copies=total_copies,
+            quantity=quantity,
+            available_quantity=quantity,
             status="AVAILABLE",
             author_id=int(author_id),
             category_id=int(category_id)
         )
 
-        AdminService.addBook(self.books, new_book)
+        self.books.append(new_book)
+        
+        new_rel = BookAuthor(book_id=str(book_id), author_id=int(author_id))
+        self.book_authors.append(new_rel)
+
         self.save_all_data()
         return True, f"Đã thêm sách: {title}"
     
