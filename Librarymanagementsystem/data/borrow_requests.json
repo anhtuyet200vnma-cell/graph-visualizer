@@ -1,27 +1,32 @@
-{
-  "borrow_requests": [
-    {
-      "request_id": 1,
-      "user_id": 2,
-      "book_id": "BK001",
-      "request_date": "2024-02-01",
-      "status": "PENDING"
-    },
-    {
-      "request_id": 2,
-      "user_id": 3,
-      "book_id": "BK002",
-      "request_date": "2024-02-01",
-      "status": "REJECTED",
-      "reason": "Member is under penalty"
-    },
-    {
-      "request_id": 3,
-      "user_id": 2,
-      "book_id": "BK003",
-      "request_date": "2024-02-02",
-      "status": "REJECTED",
-      "reason": "Book is unavailable"
-    }
-  ]
-}
+[
+  {
+    "request_id": 1,
+    "user_id": 2,
+    "request_date": "2024-02-01T09:00:00",
+    "status": "PENDING",
+    "books": ["BK001"],
+    "approval_date": null,
+    "approver": null,
+    "reject_reason": null
+  },
+  {
+    "request_id": 2,
+    "user_id": 3,
+    "request_date": "2024-02-01T10:30:00",
+    "status": "REJECTED",
+    "books": ["BK002"],
+    "approval_date": "2024-02-01T11:00:00",
+    "approver": 1,
+    "reject_reason": "Member is under penalty"
+  },
+  {
+    "request_id": 3,
+    "user_id": 2,
+    "request_date": "2024-02-02T08:45:00",
+    "status": "REJECTED",
+    "books": ["BK003"],
+    "approval_date": "2024-02-02T09:30:00",
+    "approver": 1,
+    "reject_reason": "Book is unavailable"
+  }
+]

@@ -1,38 +1,37 @@
-{
-  "borrow_orders": [
+[
     {
-      "borrow_id": 1,
-      "user_id": 2,
-      "borrow_date": "2024-01-15",
-      "due_date": "2024-01-29",
-      "status": "BORROWED",
-      "items": [
-        {
-          "book_id": "BK001",
-          "item_status": "BORROWED",
-          "condition": "GOOD"
-        },
-        {
-          "book_id": "BK002",
-          "item_status": "BORROWED",
-          "condition": "GOOD"
-        }
-      ]
+        "borrow_id": "BO001",
+        "user_id": 2,
+        "borrow_date": "2024-01-15T10:00:00",
+        "due_date": "2024-01-29T23:59:59",
+        "return_date": null,
+        "status": "BORROWED",
+        "books": [
+            "BK001",
+            "BK002"
+        ]
     },
     {
-      "borrow_id": 2,
-      "user_id": 2,
-      "borrow_date": "2024-01-20",
-      "due_date": "2024-02-03",
-      "status": "RETURNED",
-      "items": [
-        {
-          "book_id": "BK004",
-          "item_status": "RETURNED",
-          "condition": "GOOD",
-          "actual_return_date": "2024-01-28"
-        }
-      ]
+        "borrow_id": "BO002",
+        "user_id": 2,
+        "borrow_date": "2024-01-20T14:30:00",
+        "due_date": "2024-02-03T23:59:59",
+        "return_date": "2024-01-28T09:15:00",
+        "status": "RETURNED",
+        "books": [
+            "BK004"
+        ]
+    },
+    {
+        "borrow_id": "6b86f9ea-3445-4498-b179-09a2af942bc9",
+        "user_id": 1,
+        "book_id": "BK001",
+        "books": [
+            "BK001"
+        ],
+        "borrow_date": "2026-01-27T00:43:28.693510",
+        "due_date": "2026-02-10T00:43:28.693531",
+        "return_date": null,
+        "status": "BORROWED"
     }
-  ]
-}
+]
