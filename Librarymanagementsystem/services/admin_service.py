@@ -1,82 +1,78 @@
-# services/borrow_service.py
-from utils.file_handler import load_json, save_json
-from datetime import datetime, timedelta
-import uuid
-from config import MAX_BORROW_DAYS
+from utils.file_handler import read_json, write_json
+from services.borrow_service import BorrowService
 
 
-class BorrowService:
-    def __init__(
-        self,
-        borrow_path="data/borrow_orders.json",
-        book_path="data/books.json",
-        user_path="data/users.json"
-    ):
-        self.borrow_path = borrow_path
-        self.book_path = book_path
-        self.user_path = user_path
+class AdminService:
 
-    def borrow_book(self, user_id: int, book_id: int) -> bool:
-        borrows = load_json(self.borrow_path)
-        books = load_json(self.book_path)
-        users = load_json(self.user_path)
+    def __init__(self):
+        self.users = read_json("data/user.json")
+        self.books = read_json("data/book.json")
+        self.borrow_service = BorrowService()
 
-        # 1. Check user
-        user = next((u for u in users if u["user_id"] == user_id), None)
-        if not user or user["status"] != "ACTIVE":
-            return False
+    # ==================================================
+    # MEMBER MANAGEMENT
+    # ==================================================
 
-        # 2. Check borrowing limit
-        current_borrows = [
-            b for b in borrows
-            if b["user_id"] == user_id and b["status"] == "BORROWED"
-        ]
-        if len(current_borrows) >= user["borrowing_limit"]:
-            return False
+    def get_all_members(self):
+        return [u for u in self.users if u.get("role") == "MEMBER"]
 
-        # 3. Check book
-        book = next((b for b in books if b["book_id"] == book_id), None)
-        if not book or book["available_copies"] <= 0:
-            return False
+    def add_member(self, user_data):
+        new_id = max(u["user_id"] for u in self.users) + 1
 
-        # 4. Update book
-        book["available_copies"] -= 1
+        user_data["user_id"] = new_id
+        user_data["role"] = "MEMBER"
+        user_data["status"] = "ACTIVE"
 
-        # 5. Create borrow order
-        borrows.append({
-            "borrow_id": str(uuid.uuid4()),
-            "user_id": user_id,
-            "book_id": book_id,
-            "borrow_date": datetime.now().isoformat(),
-            "due_date": (datetime.now() + timedelta(days=MAX_BORROW_DAYS)).isoformat(),
-            "status": "BORROWED"
-        })
-
-        save_json(self.book_path, books)
-        save_json(self.borrow_path, borrows)
+        self.users.append(user_data)
+        write_json("data/user.json", self.users)
         return True
 
-    def return_book(self, user_id: int, book_id: int) -> bool:
-        borrows = load_json(self.borrow_path)
-        books = load_json(self.book_path)
+    def update_member(self, user_id, new_data):
+        for u in self.users:
+            if u["user_id"] == user_id and u["role"] == "MEMBER":
+                u.update(new_data)
+                write_json("data/user.json", self.users)
+                return True
+        return False
 
-        borrow = next(
-            (b for b in borrows
-             if b["user_id"] == user_id
-             and b["book_id"] == book_id
-             and b["status"] == "BORROWED"),
-            None
-        )
-        if not borrow:
-            return False
-
-        borrow["status"] = "RETURNED"
-        borrow["return_date"] = datetime.now().isoformat()
-
-        book = next((b for b in books if b["book_id"] == book_id), None)
-        if book:
-            book["available_copies"] += 1
-
-        save_json(self.borrow_path, borrows)
-        save_json(self.book_path, books)
+    def delete_member(self, user_id):
+        self.users = [u for u in self.users if u["user_id"] != user_id]
+        write_json("data/user.json", self.users)
         return True
+
+    # ==================================================
+    # BOOK MANAGEMENT
+    # ==================================================
+
+    def get_all_books(self):
+        return self.books
+
+    def add_book(self, book_data):
+        new_id = max(b["book_id"] for b in self.books) + 1
+        book_data["book_id"] = new_id
+        self.books.append(book_data)
+        write_json("data/book.json", self.books)
+        return True
+
+    def update_book(self, book_id, new_data):
+        for b in self.books:
+            if b["book_id"] == book_id:
+                b.update(new_data)
+                write_json("data/book.json", self.books)
+                return True
+        return False
+
+    def delete_book(self, book_id):
+        self.books = [b for b in self.books if b["book_id"] != book_id]
+        write_json("data/book.json", self.books)
+        return True
+
+    # ==================================================
+    # BORROW REQUEST PROCESS
+    # ==================================================
+
+    def approve_request(self, request_id):
+        return self.borrow_service.approve_request(request_id)
+
+    def reject_request(self, request_id, reason="Rejected"):
+        return self.borrow_service.reject_request(request_id, reason)
