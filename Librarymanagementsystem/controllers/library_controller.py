@@ -43,7 +43,7 @@ class LibraryController:
         data = self.file_handler.read_json("data/books.json")
         books_list = []
         for item in data:
-            pass 
+            books_list.append(Book.from_dict(item))
         return books_list
 
     def _load_borrow_orders(self):
@@ -56,6 +56,10 @@ class LibraryController:
         """Lưu toàn bộ dữ liệu từ RAM xuống ổ cứng"""
         users_data = [u.to_dict() for u in self.users]
         self.file_handler.write_json("data/users.json", users_data)
+
+        books_data = [b.to_dict() for b in self.books]
+        self.file_handler.write_json("data/book.json", books_data)
+
         print(" [System] Đã lưu dữ liệu.")
 
     # XÁC THỰC (AUTHENTICATION)
@@ -116,13 +120,33 @@ class LibraryController:
         return False, "Lỗi: Sách này không nằm trong danh sách đang mượn của bạn."
 
     # ADMIN (ADMIN SERVICE)
-    def admin_add_book(self, isbn, title, author_id, category_id, quantity):
+    def admin_add_book(self, book_id, title, publication_year, total_copies, author_id, category_id, quantity):
         """Admin thêm sách mới"""
         user = self.session_mgr.get_current_user()
-        if not user or user.role != 'admin':
+        if not user or user.role != "admin":
             return False, "Truy cập bị từ chối. Cần quyền Admin."
         return True, "Thêm sách thành công."
 
+        if any(int(b.book_id) == int(book_id) for b in self.books):
+            return False, "Book ID đã tồn tại."
+        
+        total_copies = int(total_copies)
+
+        new_book = Book(
+            book_id=int(book_id),
+            title=title,
+            publication_year=int(publication_year),
+            total_copies=total_copies,
+            available_copies=total_copies,
+            status="AVAILABLE",
+            author_id=int(author_id),
+            category_id=int(category_id)
+        )
+
+        AdminService.addBook(self.books, new_book)
+        self.save_all_data()
+        return True, f"Đã thêm sách: {title}"
+    
     def admin_delete_book(self, book_id):
         """Admin xóa sách"""
         user = self.session_mgr.get_current_user()
