@@ -1,13 +1,16 @@
-from datetime import datetime, date, timedelta
+from datetime import date, timedelta, datetime
 
-from models.book import Book
 from models.borrow_request import BorrowRequest
 from models.borrow_order import BorrowOrder
 from models.borrow_order_detail import BorrowOrderDetail
 from models.member import Member
 from models.fines import Fine
+from models.book import Book
 
 from utils.file_handler import read_json, write_json
+
+
+BORROW_DAYS = 14
 
 
 class BorrowService:
@@ -15,11 +18,14 @@ class BorrowService:
     def __init__(self):
         self.books = read_json("data/book.json")
         self.users = read_json("data/user.json")
-        self.requests = read_json("data/borrow_requests.json").get("borrow_requests", [])
-        self.orders = read_json("data/borrow_orders.json").get("borrow_orders", [])
-        self.fines = read_json("data/fine.json")
+        self.borrow_requests = read_json("data/borrow_requests.json").get("borrow_requests", [])
+        self.borrow_orders = read_json("data/borrow_orders.json").get("borrow_orders", [])
+        try:
+            self.fines = read_json("data/fine.json")
+        except:
+            self.fines = []
 
-    # ================= LOADERS =================
+    # ================= LOAD BASIC OBJECT =================
 
     def _load_member(self, user_id):
         for u in self.users:
@@ -52,10 +58,13 @@ class BorrowService:
                 )
         return None
 
-    # ================= BORROW =================
+    # ====================================================
+    # 1. MEMBER CREATE BORROW REQUEST
+    # ====================================================
 
     def create_borrow_request(self, user_id, book_id):
-        new_id = len(self.requests) + 1
+
+        new_id = len(self.borrow_requests) + 1
 
         req = BorrowRequest(
             request_id=new_id,
@@ -63,59 +72,109 @@ class BorrowService:
             books=[book_id]
         )
 
-        self.requests.append({
+        self.borrow_requests.append({
             "request_id": new_id,
             "user_id": user_id,
             "book_id": book_id,
-            "status": "PENDING",
-            "request_date": str(date.today())
+            "request_date": str(date.today()),
+            "status": "PENDING"
         })
 
-        write_json("data/borrow_requests.json", {"borrow_requests": self.requests})
-        return True
+        write_json("data/borrow_requests.json", {"borrow_requests": self.borrow_requests})
+        return True, "Tạo yêu cầu mượn thành công"
 
-    # ================= APPROVE =================
+    # ====================================================
+    # 2. ADMIN APPROVE REQUEST
+    # ====================================================
 
     def approve_request(self, request_id):
-        for r in self.requests:
-            if r["request_id"] == request_id:
 
-                borrow_id = len(self.orders) + 1
-                due = date.today() + timedelta(days=14)
+        for r in self.borrow_requests:
+            if r["request_id"] == request_id and r["status"] == "PENDING":
 
-                order = BorrowOrder(borrow_id, date.today(), due)
+                borrow_id = len(self.borrow_orders) + 1
+                borrow_date = date.today()
+                due_date = borrow_date + timedelta(days=BORROW_DAYS)
+
+                order = BorrowOrder(borrow_id, borrow_date, due_date)
                 order.add_book(r["book_id"])
 
-                self.orders.append({
+                self.borrow_orders.append({
                     "borrow_id": borrow_id,
                     "user_id": r["user_id"],
-                    "borrow_date": str(date.today()),
-                    "due_date": str(due),
+                    "borrow_date": str(borrow_date),
+                    "due_date": str(due_date),
                     "status": "BORROWED",
-                    "items": [{"book_id": r["book_id"], "item_status": "BORROWED"}]
+                    "items": [
+                        {
+                            "book_id": r["book_id"],
+                            "item_status": "BORROWED",
+                            "condition": "GOOD"
+                        }
+                    ]
                 })
 
                 r["status"] = "APPROVED"
 
-                write_json("data/borrow_orders.json", {"borrow_orders": self.orders})
-                write_json("data/borrow_requests.json", {"borrow_requests": self.requests})
+                write_json("data/borrow_orders.json", {"borrow_orders": self.borrow_orders})
+                write_json("data/borrow_requests.json", {"borrow_requests": self.borrow_requests})
 
-                return True
+                return True, "Approve thành công"
 
-        return False
+        return False, "Không tìm thấy request hoặc request không hợp lệ"
 
-    # ================= RETURN =================
+    # ====================================================
+    # 3. ADMIN REJECT REQUEST
+    # ====================================================
+
+    def reject_request(self, request_id, reason="Rejected"):
+
+        for r in self.borrow_requests:
+            if r["request_id"] == request_id and r["status"] == "PENDING":
+                r["status"] = "REJECTED"
+                r["reason"] = reason
+                write_json("data/borrow_requests.json", {"borrow_requests": self.borrow_requests})
+                return True, "Đã từ chối request"
+
+        return False, "Không thể reject"
+
+    # ====================================================
+    # 4. RETURN BOOK + CREATE FINE
+    # ====================================================
 
     def return_book(self, borrow_id, book_id, condition="GOOD"):
-        for o in self.orders:
-            if o["borrow_id"] == borrow_id:
-                for item in o["items"]:
+
+        for order in self.borrow_orders:
+            if order["borrow_id"] == borrow_id:
+
+                due_date = datetime.strptime(order["due_date"], "%Y-%m-%d").date()
+
+                for item in order["items"]:
                     if item["book_id"] == book_id:
+
+                        return_date = date.today()
                         item["item_status"] = "RETURNED"
-                        item["actual_return_date"] = str(date.today())
+                        item["condition"] = condition
+                        item["actual_return_date"] = str(return_date)
 
-                o["status"] = "RETURNED"
-                write_json("data/borrow_orders.json", {"borrow_orders": self.orders})
-                return True
+                        detail = BorrowOrderDetail(book_id)
+                        detail.actual_return_date = return_date
+                        detail.condition = condition
 
-        return False
+                        overdue = detail.calculate_overdue_days(due_date)
+                        fine, _ = Fine.create_fine(detail, overdue)
+
+                        if fine:
+                            if isinstance(self.fines, list):
+                                self.fines.append(fine.to_dict())
+                            else:
+                                self.fines = [fine.to_dict()]
+
+                            write_json("data/fine.json", self.fines)
+
+                order["status"] = "RETURNED"
+                write_json("data/borrow_orders.json", {"borrow_orders": self.borrow_orders})
+
+                return True, "Trả sách thành công"
+
+        return False, "Không tìm thấy borrow order"
